@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>내 글</title>
+  <title>방명록</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -13,13 +13,13 @@
       <h1 id="greeting">환영해요</h1>
       <button type="button" class="secondary small" id="logout-btn">로그아웃</button>
     </div>
-    <p class="lead">글을 남기면 Supabase 창고에 저장돼요. 새로고침해도, 다른 브라우저에서 로그인해도 그대로 남아 있어요.</p>
+    <p class="lead">로그인한 모든 사람이 함께 보는 방명록이에요. 내가 쓴 글만 지울 수 있어요.</p>
 
     <!-- 글쓰기 -->
     <form id="post-form" novalidate>
       <div class="field">
-        <label for="content">새 글</label>
-        <textarea id="content" rows="3" maxlength="500" placeholder="오늘 배운 것을 한 줄로 적어보세요"></textarea>
+        <label for="content">방명록 남기기</label>
+        <textarea id="content" rows="3" maxlength="500" placeholder="다녀간 흔적을 남겨주세요"></textarea>
         <div class="counter"><span id="count">0</span> / 500</div>
         <div class="error" id="content-error"></div>
       </div>
@@ -27,8 +27,8 @@
     </form>
 
     <!-- 글 목록 -->
-    <h2 class="list-title">내가 쓴 글</h2>
-    <p class="empty" id="empty" hidden>아직 쓴 글이 없어요. 첫 글을 남겨보세요.</p>
+    <h2 class="list-title">모두의 글</h2>
+    <p class="empty" id="empty" hidden>아직 아무도 글을 남기지 않았어요. 첫 글을 남겨보세요.</p>
     <ul class="posts" id="posts"></ul>
   </main>
 
@@ -42,6 +42,7 @@
     const postBtn = document.getElementById("post-btn");
     const list = document.getElementById("posts");
     const empty = document.getElementById("empty");
+    let myId = null; // 지금 로그인한 내 회원 번호 (내 글인지 구분할 때 사용)
 
     // 글자 수 세기
     textarea.addEventListener("input", () => {
@@ -50,13 +51,25 @@
 
     // 목록을 화면에 그리기
     async function renderPosts() {
-      const result = await listMyPosts();
+      const result = await listPosts();
       list.innerHTML = "";
       empty.hidden = result.posts.length > 0;
       if (!result.ok) { empty.hidden = false; empty.textContent = result.message; }
 
       result.posts.forEach((post) => {
         const li = document.createElement("li");
+        const isMine = post.user_id === myId;
+
+        // 작성자 이름 (내 글이면 "나" 표시)
+        const author = document.createElement("div");
+        author.className = "post-author";
+        author.textContent = post.author_name || "이름 없음";
+        if (isMine) {
+          const tag = document.createElement("span");
+          tag.className = "mine-tag";
+          tag.textContent = "나";
+          author.append(tag);
+        }
 
         const text = document.createElement("p");
         text.className = "post-text";
@@ -78,8 +91,9 @@
           renderPosts();
         });
 
-        meta.append(date, del);
-        li.append(text, meta);
+        meta.append(date);
+        if (isMine) meta.append(del); // 삭제 버튼은 내 글에만
+        li.append(author, text, meta);
         list.append(li);
       });
     }
@@ -105,7 +119,8 @@
     (async () => {
       const user = await currentUser();
       if (!user) { location.replace("login.html"); return; }
-      document.getElementById("greeting").textContent = `${user.name}님의 글`;
+      myId = user.id;
+      document.getElementById("greeting").textContent = "방명록";
       renderPosts();
     })();
 

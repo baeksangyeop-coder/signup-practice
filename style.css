@@ -148,3 +148,11 @@ textarea[aria-invalid="true"] { border-color: var(--error); }
   background: none; color: var(--error); font-weight: 600; font-size: 0.82rem;
 }
 .link-btn:hover:not(:disabled) { filter: none; text-decoration: underline; }
+
+/* ===== 방명록 버전 추가 스타일 ===== */
+.post-author { font-weight: 700; font-size: 0.92rem; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+.mine-tag {
+  font-size: 0.72rem; font-weight: 700;
+  padding: 1px 7px; border-radius: 999px;
+  background: var(--accent); color: var(--accent-ink);
+}

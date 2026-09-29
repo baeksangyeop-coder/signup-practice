@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>내 글</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="panel wide">
+    <div class="topbar">
+      <h1 id="greeting">환영해요</h1>
+      <button type="button" class="secondary small" id="logout-btn">로그아웃</button>
+    </div>
+    <p class="lead">글을 남기면 Supabase 창고에 저장돼요. 새로고침해도, 다른 브라우저에서 로그인해도 그대로 남아 있어요.</p>
+
+    <!-- 글쓰기 -->
+    <form id="post-form" novalidate>
+      <div class="field">
+        <label for="content">새 글</label>
+        <textarea id="content" rows="3" maxlength="500" placeholder="오늘 배운 것을 한 줄로 적어보세요"></textarea>
+        <div class="counter"><span id="count">0</span> / 500</div>
+        <div class="error" id="content-error"></div>
+      </div>
+      <button type="submit" id="post-btn">저장하기</button>
+    </form>
+
+    <!-- 글 목록 -->
+    <h2 class="list-title">내가 쓴 글</h2>
+    <p class="empty" id="empty" hidden>아직 쓴 글이 없어요. 첫 글을 남겨보세요.</p>
+    <ul class="posts" id="posts"></ul>
+  </main>
+
+  <!-- 불러오는 순서가 중요해요: Supabase 도구 → auth.js(전화기) → posts.js(글 기능) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
+  <script src="posts.js"></script>
+  <script>
+    const form = document.getElementById("post-form");
+    const textarea = document.getElementById("content");
+    const postBtn = document.getElementById("post-btn");
+    const list = document.getElementById("posts");
+    const empty = document.getElementById("empty");
+
+    // 글자 수 세기
+    textarea.addEventListener("input", () => {
+      document.getElementById("count").textContent = textarea.value.length;
+    });
+
+    // 목록을 화면에 그리기
+    async function renderPosts() {
+      const result = await listMyPosts();
+      list.innerHTML = "";
+      empty.hidden = result.posts.length > 0;
+      if (!result.ok) { empty.hidden = false; empty.textContent = result.message; }
+
+      result.posts.forEach((post) => {
+        const li = document.createElement("li");
+
+        const text = document.createElement("p");
+        text.className = "post-text";
+        // textContent를 쓰면 누가 글에 코드를 적어도 실행되지 않고 글자로만 보여요 (보안)
+        text.textContent = post.content;
+
+        const meta = document.createElement("div");
+        meta.className = "post-meta";
+        const date = document.createElement("time");
+        date.textContent = new Date(post.created_at).toLocaleString("ko-KR");
+        const del = document.createElement("button");
+        del.type = "button";
+        del.className = "link-btn";
+        del.textContent = "삭제";
+        del.addEventListener("click", async () => {
+          if (!confirm("이 글을 삭제할까요?")) return;
+          const r = await deletePost(post.id);
+          if (!r.ok) return alert(r.message);
+          renderPosts();
+        });
+
+        meta.append(date, del);
+        li.append(text, meta);
+        list.append(li);
+      });
+    }
+
+    // 글 저장
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const content = textarea.value.trim();
+      setFieldError(textarea, content ? "" : "내용을 입력해 주세요.");
+      if (!content) return;
+
+      setLoading(postBtn, true, "저장하는 중…");
+      const result = await createPost(content);
+      setLoading(postBtn, false);
+
+      if (!result.ok) return setFieldError(textarea, result.message);
+      textarea.value = "";
+      document.getElementById("count").textContent = "0";
+      renderPosts();
+    });
+
+    // 페이지 열릴 때: 로그인 확인 → 인사 → 목록 불러오기
+    (async () => {
+      const user = await currentUser();
+      if (!user) { location.replace("login.html"); return; }
+      document.getElementById("greeting").textContent = `${user.name}님의 글`;
+      renderPosts();
+    })();
+
+    document.getElementById("logout-btn").addEventListener("click", async () => {
+      await logOut();
+      location.href = "login.html";
+    });
+  </script>
+</body>
+</html>

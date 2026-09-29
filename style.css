@@ -1,0 +1,150 @@
+/* 색상 토큰 — 여기 값만 바꿔도 전체 분위기가 바뀝니다 */
+:root {
+  --bg: #e9eef4;
+  --surface: #ffffff;
+  --ink: #18212e;
+  --muted: #5b6778;
+  --line: #cfd7e2;
+  --accent: #2448c9;
+  --accent-ink: #ffffff;
+  --error: #b42318;
+  --success-bg: #e3f4ea;
+  --success-ink: #14633a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Pretendard", system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  line-height: 1.5;
+}
+
+.panel {
+  width: 100%;
+  max-width: 400px;
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 40px 32px 32px;
+  border: 1px solid var(--line);
+}
+
+h1 {
+  margin: 0 0 6px;
+  font-size: 1.75rem;
+  letter-spacing: -0.02em;
+}
+
+.lead { margin: 0 0 28px; color: var(--muted); }
+
+.field { margin-bottom: 18px; }
+
+label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+input {
+  width: 100%;
+  padding: 12px 14px;
+  font: inherit;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  background: #fbfcfd;
+  color: var(--ink);
+}
+
+input:focus { outline: none; border-color: var(--accent); background: #fff; }
+input[aria-invalid="true"] { border-color: var(--error); }
+
+.hint { font-size: 0.82rem; color: var(--muted); margin-top: 4px; }
+.error { font-size: 0.85rem; color: var(--error); margin-top: 4px; min-height: 1.2em; }
+
+button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 13px;
+  font: inherit;
+  font-weight: 700;
+  border: 0;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  cursor: pointer;
+}
+button:hover:not(:disabled) { filter: brightness(1.1); }
+button:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+button:disabled { opacity: 0.6; cursor: wait; }
+
+button.secondary { background: transparent; color: var(--ink); border: 1.5px solid var(--line); }
+
+.switch { text-align: center; margin: 22px 0 0; font-size: 0.92rem; color: var(--muted); }
+.switch a { color: var(--accent); font-weight: 600; }
+
+.notice {
+  background: var(--success-bg);
+  color: var(--success-ink);
+  padding: 12px 14px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  font-size: 0.92rem;
+}
+.notice.is-error { background: #fdecea; color: var(--error); }
+
+/* 환영 페이지의 "창고 들여다보기" */
+.peek {
+  margin: 24px 0 8px;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--bg);
+  font-size: 0.85rem;
+}
+.peek dt { font-weight: 700; margin-top: 10px; }
+.peek dt:first-child { margin-top: 0; }
+.peek dd { margin: 2px 0 0; word-break: break-all; color: var(--muted); }
+
+/* ===== 글쓰기 실습용 추가 스타일 ===== */
+.panel.wide { max-width: 560px; }
+
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.topbar h1 { margin: 0; }
+
+button.small { width: auto; margin: 0; padding: 8px 14px; font-size: 0.88rem; flex-shrink: 0; }
+
+textarea {
+  width: 100%;
+  padding: 12px 14px;
+  font: inherit;
+  line-height: 1.6;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  background: #fbfcfd;
+  color: var(--ink);
+  resize: vertical;
+}
+textarea:focus { outline: none; border-color: var(--accent); background: #fff; }
+textarea[aria-invalid="true"] { border-color: var(--error); }
+
+.counter { text-align: right; font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+
+.list-title { font-size: 1.05rem; margin: 36px 0 12px; }
+.empty { color: var(--muted); font-size: 0.92rem; }
+
+.posts { list-style: none; margin: 0; padding: 0; }
+.posts li { padding: 16px 0; border-top: 1px solid var(--line); }
+.post-text { margin: 0 0 8px; white-space: pre-wrap; word-break: break-word; }
+.post-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; color: var(--muted); }
+
+.link-btn {
+  width: auto; margin: 0; padding: 4px 6px;
+  background: none; color: var(--error); font-weight: 600; font-size: 0.82rem;
+}
+.link-btn:hover:not(:disabled) { filter: none; text-decoration: underline; }

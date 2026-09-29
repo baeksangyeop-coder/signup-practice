@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>회원가입 실습</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="panel">
+    <h1>계정 만들기</h1>
+    <p class="lead">실습용이니 가상의 정보로 가입해 보세요.</p>
+
+    <!-- novalidate: 브라우저 기본 경고 대신 우리가 만든 에러 문구를 보여주기 위해 -->
+    <form id="signup-form" novalidate>
+      <div class="field">
+        <label for="name">이름</label>
+        <input id="name" type="text" autocomplete="name" placeholder="홍길동" />
+        <div class="error" id="name-error"></div>
+      </div>
+
+      <div class="field">
+        <label for="email">이메일</label>
+        <input id="email" type="email" autocomplete="email" placeholder="test@example.com" />
+        <div class="error" id="email-error"></div>
+      </div>
+
+      <div class="field">
+        <label for="password">비밀번호</label>
+        <input id="password" type="password" autocomplete="new-password" />
+        <div class="hint">8자 이상</div>
+        <div class="error" id="password-error"></div>
+      </div>
+
+      <div class="field">
+        <label for="password2">비밀번호 확인</label>
+        <input id="password2" type="password" autocomplete="new-password" />
+        <div class="error" id="password2-error"></div>
+      </div>
+
+      <button type="submit" id="submit-btn">가입하기</button>
+    </form>
+
+    <p class="switch">이미 계정이 있나요? <a href="login.html">로그인</a></p>
+  </main>
+
+  <!-- Supabase 도구(라이브러리) 불러오기: auth.js보다 먼저 와야 해요 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
+  <script>
+    /* ===== 프론트엔드(홀)의 일: 입력 받고, 1차 검사하고, 서버에 부탁하기 ===== */
+    const form = document.getElementById("signup-form");
+    const nameInput = document.getElementById("name");
+    const emailInput = document.getElementById("email");
+    const pwInput = document.getElementById("password");
+    const pw2Input = document.getElementById("password2");
+    const button = document.getElementById("submit-btn");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault(); // 페이지가 새로고침되지 않게 막기
+
+      const name = nameInput.value.trim();
+      const email = emailInput.value.trim().toLowerCase();
+      const pw = pwInput.value;
+      const pw2 = pw2Input.value;
+
+      // --- 1차 검사 (화면에서 바로 확인할 수 있는 것들) ---
+      let valid = true;
+      setFieldError(nameInput, name ? "" : "이름을 입력해 주세요.");
+      if (!name) valid = false;
+
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      setFieldError(emailInput, emailOk ? "" : "이메일 형식으로 입력해 주세요. 예: test@example.com");
+      if (!emailOk) valid = false;
+
+      setFieldError(pwInput, pw.length >= 8 ? "" : "비밀번호를 8자 이상 입력해 주세요.");
+      if (pw.length < 8) valid = false;
+
+      setFieldError(pw2Input, pw === pw2 ? "" : "비밀번호가 서로 달라요.");
+      if (pw !== pw2) valid = false;
+
+      if (!valid) return; // 하나라도 틀리면 서버에 보내지 않음
+
+      // --- 서버(auth.js)에 가입 요청 ---
+      setLoading(button, true, "가입하는 중…");
+      const result = await signUp(name, email, pw);
+      setLoading(button, false);
+
+      if (!result.ok) {
+        setFieldError(emailInput, result.message);
+        return;
+      }
+
+      // 가입 성공 → 로그인 페이지로 이동 (주소 뒤에 표시를 달아서 안내 문구를 띄움)
+      location.href = "login.html?joined=1";
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>주문서</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="product.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="product.html">Practice Store</a>
+    <nav class="account" id="account" aria-live="polite"></nav>
+  </header>
+
+  <main class="page checkout">
+    <a class="back-link" id="back-link" href="product.html">상품으로 돌아가기</a>
+    <h1>주문서</h1>
+
+    <p class="notice-line" id="status" aria-live="polite">주문 정보를 불러오는 중…</p>
+
+    <div class="checkout-grid" id="checkout" hidden>
+      <!-- 왼쪽: 구매자 정보와 동의 -->
+      <section class="checkout-form">
+        <h2>구매자 정보</h2>
+        <dl class="buyer">
+          <dt>이름</dt><dd id="buyer-name"></dd>
+          <dt>이메일</dt><dd id="buyer-email"></dd>
+        </dl>
+        <p class="hint-line">다운로드 링크와 영수증이 이 이메일로 발송돼요. 디지털 상품이라 배송 정보는 필요 없어요.</p>
+
+        <h2>구매 조건</h2>
+        <label class="agree">
+          <input type="checkbox" id="agree" />
+          <span>파일을 내려받은 뒤에는 환불이 어렵다는 점을 확인했고, 선택한 라이선스 범위 안에서만 사용하는 데 동의해요.</span>
+        </label>
+        <p class="error-line" id="agree-error" aria-live="polite"></p>
+      </section>
+
+      <!-- 오른쪽: 주문 요약 -->
+      <aside class="summary-card">
+        <img id="summary-image" class="summary-image" src="" alt="" />
+        <p class="summary-product" id="summary-product"></p>
+        <p class="summary-license" id="summary-license"></p>
+
+        <div class="total">
+          <span>결제 금액</span>
+          <strong id="summary-price"></strong>
+        </div>
+
+        <button type="button" class="buy-btn" id="order-btn">주문하기</button>
+        <p class="error-line" id="order-error" aria-live="polite"></p>
+      </aside>
+    </div>
+
+    <!-- 주문이 만들어진 뒤 보여줄 영역 -->
+    <section class="order-done" id="order-done" hidden>
+      <h2>주문이 만들어졌어요</h2>
+      <p>이제 결제만 남았어요. 결제 창은 다음 단계에서 연결해요.</p>
+      <dl class="buyer">
+        <dt>주문번호</dt><dd id="done-id"></dd>
+        <dt>상품</dt><dd id="done-name"></dd>
+        <dt>결제할 금액</dt><dd id="done-amount"></dd>
+      </dl>
+      <p class="hint-line">이 금액은 화면이 아니라 서버가 창고의 가격표를 보고 정한 거예요.</p>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
+  <script src="checkout.js"></script>
+</body>
+</html>

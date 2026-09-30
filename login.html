@@ -43,12 +43,22 @@
     const button = document.getElementById("submit-btn");
     const notice = document.getElementById("notice");
 
-    // 이미 로그인한 상태라면 바로 환영 페이지로 (서버에 물어보고 기다리기)
+    // 로그인 후 돌아갈 곳 (예: 주문서). 우리 사이트 안의 페이지일 때만 허용해요.
+    // 아무 주소나 허용하면, 나쁜 사람이 로그인 후 가짜 사이트로 보내는 링크를 만들 수 있거든요.
+    const nextParam = new URLSearchParams(location.search).get("next") || "";
+    const next = /^[a-z0-9-]+\.html(\?[a-zA-Z0-9=&%_.-]*)?$/.test(nextParam) ? nextParam : "welcome.html";
+
+    // 이미 로그인한 상태라면 바로 이동 (서버에 물어보고 기다리기)
     currentUser().then((user) => {
-      if (user) location.href = "welcome.html";
+      if (user) location.href = next;
     });
 
     // 회원가입 직후 넘어온 경우 안내 문구 보여주기
+    if (nextParam.startsWith("checkout.html")) {
+      notice.textContent = "주문하려면 먼저 로그인해 주세요.";
+      notice.hidden = false;
+    }
+
     if (new URLSearchParams(location.search).get("joined")) {
       notice.textContent = "가입이 완료됐어요. 이제 로그인해 보세요.";
       notice.hidden = false;
@@ -75,7 +85,7 @@
         return;
       }
 
-      location.href = "welcome.html"; // 로그인 성공!
+      location.href = next; // 로그인 성공! 원래 가려던 곳으로
     });
   </script>
 </body>

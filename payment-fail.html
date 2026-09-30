@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>결제 실패</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="product.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">Practice Store</a>
+  </header>
+
+  <main class="page checkout">
+    <section class="result-card">
+      <h1>결제가 진행되지 않았어요</h1>
+      <p id="fail-message">결제창이 닫혔거나 결제 중 문제가 생겼어요. 요금은 청구되지 않았어요.</p>
+      <p class="hint-line" id="fail-code"></p>
+      <p class="result-actions">
+        <a class="buy-btn link-btn-block" id="retry-link" href="index.html">다시 결제하기</a>
+      </p>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
+  <script>
+    // 토스가 실패 이유를 주소에 붙여서 보내줘요. 여기서는 승인 요청을 하지 않아요.
+    const params = new URLSearchParams(location.search);
+    const message = params.get("message");
+    const code = params.get("code");
+    const orderId = params.get("orderId");
+
+    if (message) document.getElementById("fail-message").textContent = message + " 요금은 청구되지 않았어요.";
+    if (code) document.getElementById("fail-code").textContent = `오류 코드: ${code}`;
+
+    // 어떤 라이선스를 사려던 주문이었는지 찾아서, 같은 주문서로 돌아가는 링크 만들기
+    // (내 주문만 볼 수 있는 규칙 덕분에 남의 주문은 조회되지 않아요)
+    (async () => {
+      if (!orderId) return;
+      const { data } = await db.from("orders").select("license_id").eq("id", orderId).maybeSingle();
+      if (data?.license_id) {
+        document.getElementById("retry-link").href = `checkout.html?license=${encodeURIComponent(data.license_id)}`;
+      }
+    })();
+  </script>
+</body>
+</html>

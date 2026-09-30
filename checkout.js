@@ -6,6 +6,10 @@
    가격은 보내지 않아요. 서버가 창고에서 직접 찾아 주문에 적습니다.
    ========================================================= */
 
+// 토스 클라이언트 키 — 브라우저에 공개돼도 되는 키예요. (문서용 테스트 키)
+// 시크릿 키는 절대 여기 넣지 않아요. 그건 Supabase 서버 함수의 비밀 설정에만 있어요.
+const TOSS_CLIENT_KEY = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
+
 function won(n) {
   return n.toLocaleString("ko-KR") + "원";
 }
@@ -110,15 +114,56 @@ async function init() {
       return;
     }
 
-    // 6) 서버가 돌려준 주문 정보 보여주기
-    const o = result.order;
+    // 6) 주문이 만들어졌으면 결제 화면으로
     document.getElementById("checkout").hidden = true;
     document.getElementById("back-link").hidden = true;
-    document.getElementById("done-id").textContent = o.order_id;
-    document.getElementById("done-name").textContent = o.order_name;
-    document.getElementById("done-amount").textContent = won(o.amount);
-    document.getElementById("order-done").hidden = false;
+    showPayment(result.order, user);
   });
+}
+
+/* ---------- 토스 결제 화면 띄우기 ---------- */
+// 금액은 서버 함수가 돌려준 주문 금액(order.amount)을 그대로 써요.
+async function showPayment(order, user) {
+  document.getElementById("pay-order-id").textContent = order.order_id;
+  document.getElementById("pay-order-name").textContent = order.order_name;
+  document.getElementById("pay-amount").textContent = won(order.amount);
+  document.getElementById("pay-step").hidden = false;
+
+  const payBtn = document.getElementById("pay-btn");
+  const payError = document.getElementById("pay-error");
+
+  try {
+    const tossPayments = TossPayments(TOSS_CLIENT_KEY);
+    // customerKey: 구매자를 구분하는 값. 추측하기 어려운 회원 번호(UUID)를 써요.
+    const widgets = tossPayments.widgets({ customerKey: user.id });
+
+    await widgets.setAmount({ currency: "KRW", value: order.amount });
+    await Promise.all([
+      widgets.renderPaymentMethods({ selector: "#payment-method", variantKey: "DEFAULT" }),
+      widgets.renderAgreement({ selector: "#agreement", variantKey: "AGREEMENT" }),
+    ]);
+    payBtn.disabled = false; // 결제 화면이 다 그려진 뒤에만 누를 수 있게
+
+    payBtn.addEventListener("click", async () => {
+      payError.textContent = "";
+      try {
+        // 결제창을 열고, 끝나면 토스가 성공/실패 페이지로 돌려보내요.
+        await widgets.requestPayment({
+          orderId: order.order_id,
+          orderName: order.order_name,
+                   successUrl: new URL("payment-success.html", location.href).href,
+          failUrl: new URL("payment-fail.html", location.href).href,
+          customerEmail: user.email,
+          customerName: user.name,
+        });
+      } catch (err) {
+        // 사용자가 결제창을 닫은 경우 등
+        payError.textContent = err?.message || "결제를 진행하지 못했어요. 다시 시도해 주세요.";
+      }
+    });
+  } catch (err) {
+    payError.textContent = "결제 화면을 불러오지 못했어요. 새로고침 후 다시 시도해 주세요.";
+  }
 }
 
 init();

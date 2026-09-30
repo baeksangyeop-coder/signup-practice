@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>결제 확인</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="product.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">Practice Store</a>
+  </header>
+
+  <main class="page checkout">
+    <section class="result-card" aria-live="polite">
+      <h1 id="result-title">결제를 확인하는 중…</h1>
+      <p id="result-text">서버가 토스페이먼츠에 결제를 승인 요청하고 있어요. 이 창을 닫지 마세요.</p>
+      <dl class="buyer" id="result-detail" hidden>
+        <dt>상품</dt><dd id="result-name"></dd>
+        <dt>결제 금액</dt><dd id="result-amount"></dd>
+        <dt>주문번호</dt><dd id="result-order"></dd>
+      </dl>
+      <p class="result-actions"><a class="buy-btn link-btn-block" href="index.html">스토어로 돌아가기</a></p>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
+  <script src="payment-success.js"></script>
+</body>
+</html>

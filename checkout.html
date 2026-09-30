@@ -53,20 +53,28 @@
       </aside>
     </div>
 
-    <!-- 주문이 만들어진 뒤 보여줄 영역 -->
-    <section class="order-done" id="order-done" hidden>
-      <h2>주문이 만들어졌어요</h2>
-      <p>이제 결제만 남았어요. 결제 창은 다음 단계에서 연결해요.</p>
+    <!-- 주문이 만들어진 뒤: 토스 결제 화면 -->
+    <section class="pay-step" id="pay-step" hidden>
+      <h2>결제하기</h2>
       <dl class="buyer">
-        <dt>주문번호</dt><dd id="done-id"></dd>
-        <dt>상품</dt><dd id="done-name"></dd>
-        <dt>결제할 금액</dt><dd id="done-amount"></dd>
+        <dt>주문번호</dt><dd id="pay-order-id"></dd>
+        <dt>상품</dt><dd id="pay-order-name"></dd>
+        <dt>결제 금액</dt><dd id="pay-amount"></dd>
       </dl>
-      <p class="hint-line">이 금액은 화면이 아니라 서버가 창고의 가격표를 보고 정한 거예요.</p>
+      <p class="hint-line">이 금액은 서버가 가격표를 보고 정한 거예요. 테스트 결제라 실제로 돈이 나가지 않아요.</p>
+
+      <!-- 토스가 결제수단 선택 화면과 약관을 이 두 칸에 그려줘요 -->
+      <div id="payment-method" class="toss-area"></div>
+      <div id="agreement" class="toss-area"></div>
+
+      <button type="button" class="buy-btn" id="pay-btn" disabled>결제하기</button>
+      <p class="error-line" id="pay-error" aria-live="polite"></p>
     </section>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- 토스페이먼츠 결제 도구 (버전 2) -->
+  <script src="https://js.tosspayments.com/v2/standard"></script>
   <script src="auth.js"></script>
   <script src="checkout.js"></script>
 </body>

@@ -42,7 +42,7 @@ async function createOrder(licenseId, agreed) {
 /* ---------- 상단 로그인 표시 ---------- */
 function renderAccount(user) {
   const box = document.getElementById("account");
-  box.innerHTML = `<span class="account-name"></span><a href="welcome.html">방명록</a>`;
+  box.innerHTML = `<span class="account-name"></span><a href="my-orders.html">내 주문</a><a href="welcome.html">방명록</a>`;
   box.querySelector(".account-name").textContent = `${user.name}님`;
 }
 
@@ -151,7 +151,8 @@ async function showPayment(order, user) {
         await widgets.requestPayment({
           orderId: order.order_id,
           orderName: order.order_name,
-                   successUrl: new URL("payment-success.html", location.href).href,
+          // 지금 페이지와 같은 폴더의 성공/실패 페이지로 돌아오게 해요.
+          successUrl: new URL("payment-success.html", location.href).href,
           failUrl: new URL("payment-fail.html", location.href).href,
           customerEmail: user.email,
           customerName: user.name,

@@ -106,7 +106,7 @@ async function renderAccount() {
   try {
     const user = await currentUser();
     if (user) {
-      box.innerHTML = `<span class="account-name"></span><a href="welcome.html">방명록</a><button type="button" class="text-btn" id="logout-btn">로그아웃</button>`;
+      box.innerHTML = `<span class="account-name"></span><a href="my-orders.html">내 주문</a><a href="welcome.html">방명록</a><button type="button" class="text-btn" id="logout-btn">로그아웃</button>`;
       box.querySelector(".account-name").textContent = `${user.name}님`;
       box.querySelector("#logout-btn").addEventListener("click", async () => {
         await logOut();

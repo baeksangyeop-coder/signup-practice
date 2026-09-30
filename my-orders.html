@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>내 주문</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="product.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">Practice Store</a>
+    <nav class="account" id="account" aria-live="polite"></nav>
+  </header>
+
+  <main class="page checkout">
+    <h1>내 주문</h1>
+    <p class="notice-line" id="status" aria-live="polite">주문 내역을 불러오는 중…</p>
+    <ul class="order-list" id="order-list"></ul>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
+  <script src="my-orders.js"></script>
+</body>
+</html>

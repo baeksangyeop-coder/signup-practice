@@ -266,3 +266,30 @@ details p { margin-top: 8px !important; }
 .result-card .buyer { margin-bottom: 24px; }
 .result-actions { margin: 0; }
 .link-btn-block { display: block; text-align: center; text-decoration: none; }
+
+/* ===== 내 주문 ===== */
+.order-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; max-width: 680px; }
+.order-item {
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.order-item.is-pending, .order-item.is-canceled { background: transparent; }
+.order-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.order-badge {
+  flex-shrink: 0;
+  font-size: 0.8rem; font-weight: 700;
+  padding: 3px 10px; border-radius: 999px;
+  background: var(--line); color: var(--muted);
+}
+.is-paid .order-badge { background: var(--accent-soft); color: var(--accent); }
+.order-meta { margin: 6px 0 0; color: var(--muted); font-size: 0.92rem; }
+.order-note { margin: 6px 0 0; color: var(--muted); font-size: 0.85rem; }
+.order-actions { margin-top: 14px; }
+.order-actions:empty { display: none; }
+.small-btn { width: auto; padding: 11px 18px; font-size: 0.95rem; }
+.small-btn:disabled { opacity: 0.6; cursor: wait; }
+.text-link { font-weight: 600; text-decoration: none; font-size: 0.92rem; }
+.result-actions + .result-actions { margin-top: 14px; text-align: center; }
+.result-card a[hidden] { display: none; }

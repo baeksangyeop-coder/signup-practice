@@ -51,6 +51,7 @@ async function confirmPayment() {
   document.getElementById("result-amount").textContent = won(data.amount);
   document.getElementById("result-order").textContent = orderId;
   document.getElementById("result-detail").hidden = false;
+  document.getElementById("go-orders").hidden = false;
 
   // 주소창의 결제 정보 지우기 (새로고침·공유 시 노출 방지)
   history.replaceState(null, "", "payment-success.html");

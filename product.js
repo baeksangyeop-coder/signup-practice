@@ -106,13 +106,17 @@ async function renderAccount() {
   try {
     const user = await currentUser();
     if (user) {
-      box.innerHTML = `<span class="account-name"></span><a href="welcome.html">방명록</a>`;
+      box.innerHTML = `<span class="account-name"></span><a href="welcome.html">방명록</a><button type="button" class="text-btn" id="logout-btn">로그아웃</button>`;
       box.querySelector(".account-name").textContent = `${user.name}님`;
+      box.querySelector("#logout-btn").addEventListener("click", async () => {
+        await logOut();
+        location.reload();
+      });
     } else {
-      box.innerHTML = `<a href="login.html">로그인</a>`;
+      box.innerHTML = `<a href="login.html">로그인</a><a href="signup.html">회원가입</a>`;
     }
   } catch {
-    box.innerHTML = `<a href="login.html">로그인</a>`;
+    box.innerHTML = `<a href="login.html">로그인</a><a href="signup.html">회원가입</a>`;
   }
 }
 

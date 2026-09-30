@@ -11,7 +11,7 @@
   <main class="panel wide">
     <div class="topbar">
       <h1 id="greeting">환영해요</h1>
-      <button type="button" class="secondary small" id="logout-btn">로그아웃</button>
+      <span class="topbar-actions"><a class="store-link" href="index.html">스토어</a><button type="button" class="secondary small" id="logout-btn">로그아웃</button></span>
     </div>
     <p class="lead">로그인한 모든 사람이 함께 보는 방명록이에요. 내가 쓴 글만 지울 수 있어요.</p>
 
@@ -126,7 +126,7 @@
 
     document.getElementById("logout-btn").addEventListener("click", async () => {
       await logOut();
-      location.href = "login.html";
+      location.href = "index.html";
     });
   </script>
 </body>

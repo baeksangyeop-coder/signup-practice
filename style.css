@@ -156,3 +156,7 @@ textarea[aria-invalid="true"] { border-color: var(--error); }
   padding: 1px 7px; border-radius: 999px;
   background: var(--accent); color: var(--accent-ink);
 }
+
+/* 방명록 상단: 스토어 링크 + 로그아웃 */
+.topbar-actions { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+.store-link { color: var(--accent); font-weight: 600; text-decoration: none; font-size: 0.92rem; }

@@ -231,3 +231,11 @@ details p { margin-top: 8px !important; }
   .summary-card { position: static; }
   .checkout .buy-btn { display: block; } /* 주문서에선 휴대폰에서도 버튼 보이기 */
 }
+
+/* 상단 메뉴의 로그아웃 버튼 */
+.text-btn {
+  padding: 0; border: 0; background: none;
+  font: inherit; font-weight: 600; color: var(--muted); cursor: pointer;
+}
+.text-btn:hover { color: var(--ink); }
+.text-btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }

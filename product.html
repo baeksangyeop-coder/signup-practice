@@ -2,92 +2,11 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Fieldwork UI Kit</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-  <link rel="stylesheet" href="product.css" />
+  <!-- 상세페이지가 첫 화면(index.html)으로 옮겨졌어요. 예전 주소로 와도 자동으로 이동해요. -->
+  <meta http-equiv="refresh" content="0; url=index.html" />
+  <title>이동 중</title>
 </head>
 <body>
-  <header class="site-header">
-    <a class="brand" href="product.html">Practice Store</a>
-    <nav class="account" id="account" aria-live="polite"></nav>
-  </header>
-
-  <main class="page">
-    <!-- 위쪽: 이미지 + 구매 영역 -->
-    <section class="hero">
-      <div class="gallery">
-        <img id="main-image" class="main-image" src="" alt="" />
-        <div class="thumbs" id="thumbs"></div>
-      </div>
-
-      <div class="buy-panel">
-        <p class="kind">Figma UI 키트</p>
-        <h1 id="product-name"></h1>
-        <p class="summary" id="product-summary"></p>
-
-        <fieldset class="license-group">
-          <legend>라이선스 선택</legend>
-          <div id="licenses"></div>
-        </fieldset>
-
-        <div class="total">
-          <span>결제 금액</span>
-          <strong data-total></strong>
-        </div>
-
-        <button type="button" class="buy-btn" data-buy>구매하기</button>
-        <p class="buy-message" id="buy-message" aria-live="polite"></p>
-
-        <ul class="facts">
-          <li>결제 후 바로 다운로드</li>
-          <li>Figma 파일 1개 (.fig)</li>
-          <li>구매 후 업데이트 무료</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- 아래쪽: 상세 설명 -->
-    <section class="details">
-      <h2>들어 있는 것</h2>
-      <ul class="includes">
-        <li><strong>입력 컴포넌트 48개</strong><span>텍스트, 비밀번호, 선택, 체크박스 등. 기본·선택·에러·비활성 상태 포함</span></li>
-        <li><strong>화면 예시 12개</strong><span>회원가입, 로그인, 비밀번호 찾기, 결제 수단 선택 등</span></li>
-        <li><strong>라이트·다크 모드</strong><span>색상 변수(Variables)로 한 번에 전환</span></li>
-        <li><strong>오토 레이아웃 적용</strong><span>글자 길이가 바뀌어도 모양이 깨지지 않아요</span></li>
-      </ul>
-
-      <h2>사용 환경</h2>
-      <p>Figma 무료 요금제에서도 열 수 있어요. 색상 변수 기능은 Figma 최신 버전에서 가장 잘 동작해요.</p>
-
-      <h2>자주 묻는 질문</h2>
-      <details>
-        <summary>라이선스는 나중에 바꿀 수 있나요?</summary>
-        <p>네. 차액만 결제하면 더 넓은 라이선스로 바꿀 수 있어요.</p>
-      </details>
-      <details>
-        <summary>환불이 되나요?</summary>
-        <p>다운로드 전이라면 구매 후 7일 안에 전액 환불해 드려요. 디지털 상품 특성상 파일을 내려받은 뒤에는 환불이 어려워요.</p>
-      </details>
-      <details>
-        <summary>세금계산서를 받을 수 있나요?</summary>
-        <p>주문서에서 사업자 정보를 입력하면 결제 후 발행해 드려요.</p>
-      </details>
-    </section>
-  </main>
-
-  <!-- 휴대폰 화면에서만 보이는 하단 구매 바 -->
-  <div class="mobile-bar">
-    <div>
-      <span class="mobile-label"><span data-selected-name></span> 라이선스</span>
-      <strong data-total></strong>
-    </div>
-    <button type="button" class="buy-btn" data-buy>구매하기</button>
-  </div>
-
-  <!-- 불러오는 순서: Supabase 도구 → auth.js(로그인 확인) → product.js(상품 페이지) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="auth.js"></script>
-  <script src="product.js"></script>
+  <p><a href="index.html">스토어로 이동</a></p>
 </body>
 </html>

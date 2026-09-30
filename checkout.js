@@ -46,7 +46,7 @@ function renderAccount(user) {
 async function init() {
   // 1) 어떤 라이선스인지 없으면 상품 페이지로
   if (!licenseId) {
-    location.replace("product.html");
+    location.replace("index.html");
     return;
   }
 

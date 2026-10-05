@@ -9,7 +9,7 @@
 // 2. 주문이 그 사람 것인지, 아직 결제 대기 상태인지 확인
 // 3. 토스가 알려준 금액이 창고의 주문 금액과 같은지 확인 (조작 방지)
 // 4. 시크릿 키로 토스에 "이 결제 승인해 주세요" 요청
-// 5. 성공하면 주문을 paid로 바꾸기
+// 5. 성공하면 주문을 paid로 바꾸기 (실패하면 기록을 남기고 문의 안내)
 // =========================================================
 
 import { createClient } from "npm:@supabase/supabase-js@2";
@@ -103,11 +103,34 @@ Deno.serve(async (req) => {
   }
 
   // 5) 주문을 결제 완료로 바꾸기
-  await admin
+  const { data: updated, error: updateError } = await admin
     .from("orders")
     .update({ status: "paid", payment_key: payment.paymentKey, paid_at: new Date().toISOString() })
     .eq("id", order.id)
-    .eq("status", "pending");
+    .eq("status", "pending")
+    .select("id");
+
+  // 바뀐 줄이 없으면: 동시에 들어온 다른 요청이 먼저 paid로 바꿨는지 다시 확인
+  let recorded = !updateError && (updated?.length ?? 0) > 0;
+  if (!recorded && !updateError) {
+    const { data: again } = await admin.from("orders").select("status").eq("id", order.id).maybeSingle();
+    recorded = again?.status === "paid";
+  }
+
+  // 토스 승인은 됐는데 주문 기록에 실패한 경우: 돈은 나갔으니 "실패"라고 안내하면 안 돼요.
+  // 서버 기록(로그)을 남기고, 화면에는 주문번호와 함께 확인이 필요하다고 알려요.
+  if (!recorded) {
+    console.error("결제 승인 후 주문 반영 실패", {
+      orderId: order.id,
+      paymentKey: payment.paymentKey,
+      error: updateError?.message,
+    });
+    return reply(500, {
+      code: "ORDER_UPDATE_FAILED",
+      message: "결제는 승인됐지만 주문 기록에 실패했어요. 아래 주문번호로 문의해 주시면 바로 확인해 드릴게요.",
+      orderId: order.id,
+    });
+  }
 
   return reply(200, {
     orderName: order.order_name,

@@ -37,7 +37,7 @@ async function logIn(email, password) {
 
   if (error) {
     const message = error.message.includes("Email not confirmed")
-      ? "이메일 인증이 아직 안 됐어요. (실습 중이라면 Confirm email 설정을 꺼주세요)"
+      ? "이메일 인증이 아직 안 됐어요. 가입할 때 받은 메일의 인증 링크를 눌러 주세요."
       : "이메일 또는 비밀번호가 맞지 않아요.";
     return { ok: false, message };
   }
